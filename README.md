@@ -1,6 +1,6 @@
 # Cards
 
-**TODO: Add description**
+**Learning elixir from Udemy course**
 
 ## Installation
 
