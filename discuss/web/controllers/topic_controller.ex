@@ -1,5 +1,7 @@
 defmodule Discuss.TopicController do
-    def new() do
-        
-    end    
+  use Discuss.Web, :controller
+
+  def new() do
+                
+  end    
 end
