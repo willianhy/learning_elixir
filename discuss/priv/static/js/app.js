@@ -1536,10 +1536,10 @@ var socket = new _phoenix.Socket("/socket", { params: { token: window.userToken 
 
 // To use Phoenix channels, the first step is to import Socket
 // and connect at the socket path in "lib/my_app/endpoint.ex":
-socket.connect
+socket.connect();
 
 // Now that you are connected, you can join channels with a topic:
-();var channel = socket.channel("topic:subtopic", {});
+var channel = socket.channel("topic:subtopic", {});
 channel.join().receive("ok", function (resp) {
   console.log("Joined successfully", resp);
 }).receive("error", function (resp) {
