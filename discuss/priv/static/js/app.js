@@ -1525,6 +1525,10 @@ channel.join().receive("ok", function (resp) {
   console.log("Unable to join", resp);
 });
 
+document.querySelector('button').addEventListener('click', function () {
+  channel.push('comment:hello', { hi: 'there!' });
+});
+
 exports.default = socket;
 });
 
