@@ -1490,6 +1490,10 @@ channel.join().receive("ok", function (resp) {
   console.log("Unable to join", resp);
 });
 
+document.querySelector('button').addEventListener('click', function () {
+  channel.push('comment:hello', { hi: 'there!' });
+});
+
 exports.default = socket;
 });
 
@@ -1498,19 +1502,11 @@ exports.default = socket;
 
 require("phoenix_html");
 
-var _socket = require("./socket");
-
-var _socket2 = _interopRequireDefault(_socket);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+require("./socket");
 });
 
 ;require.register("web/static/js/socket.js", function(exports, require, module) {
 "use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 
 var _phoenix = require("phoenix");
 
@@ -1518,22 +1514,20 @@ var socket = new _phoenix.Socket("/socket", { params: { token: window.userToken 
 
 socket.connect();
 
-var channel = socket.channel("comments:1", {});
-channel.join().receive("ok", function (resp) {
-  console.log("Joined successfully", resp);
-}).receive("error", function (resp) {
-  console.log("Unable to join", resp);
+var createSocket = function createSocket(topicId) {
+  var channel = socket.channel('comments:${topicId}', {});
+  channel.join().receive("ok", function (resp) {
+    console.log("Joined successfully", resp);
+  }).receive("error", function (resp) {
+    console.log("Unable to join", resp);
+  });
+};
+
+window.createSocket = createSocket;
 });
 
-document.querySelector('button').addEventListener('click', function () {
-  channel.push('comment:hello', { hi: 'there!' });
-});
-
-exports.default = socket;
-});
-
-;require.alias("phoenix_html/priv/static/phoenix_html.js", "phoenix_html");
-require.alias("phoenix/priv/static/phoenix.js", "phoenix");require.register("___globals___", function(exports, require, module) {
+require.alias("phoenix/priv/static/phoenix.js", "phoenix");
+require.alias("phoenix_html/priv/static/phoenix_html.js", "phoenix_html");require.register("___globals___", function(exports, require, module) {
   
 });})();require('___globals___');
 
