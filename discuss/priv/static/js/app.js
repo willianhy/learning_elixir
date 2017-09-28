@@ -1480,7 +1480,7 @@ var socket = new _phoenix.Socket("/socket", { params: { token: window.userToken 
 socket.connect();
 
 var createSocket = function createSocket(topicId) {
-  var channel = socket.channel('comments:${topicId}', {});
+  var channel = socket.channel("comments:${topicId}", {});
   channel.join().receive("ok", function (resp) {
     console.log("Joined successfully", resp);
   }).receive("error", function (resp) {
@@ -1515,7 +1515,7 @@ var socket = new _phoenix.Socket("/socket", { params: { token: window.userToken 
 socket.connect();
 
 var createSocket = function createSocket(topicId) {
-  var channel = socket.channel('comments:${topicId}', {});
+  var channel = socket.channel("comments:" + topicId, {});
   channel.join().receive("ok", function (resp) {
     console.log("Joined successfully", resp);
   }).receive("error", function (resp) {
@@ -1532,8 +1532,8 @@ var createSocket = function createSocket(topicId) {
 window.createSocket = createSocket;
 });
 
-require.alias("phoenix_html/priv/static/phoenix_html.js", "phoenix_html");
-require.alias("phoenix/priv/static/phoenix.js", "phoenix");require.register("___globals___", function(exports, require, module) {
+require.alias("phoenix/priv/static/phoenix.js", "phoenix");
+require.alias("phoenix_html/priv/static/phoenix_html.js", "phoenix_html");require.register("___globals___", function(exports, require, module) {
   
 });})();require('___globals___');
 
