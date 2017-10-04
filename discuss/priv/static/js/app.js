@@ -1480,7 +1480,7 @@ var socket = new _phoenix.Socket("/socket", { params: { token: window.userToken 
 socket.connect();
 
 var createSocket = function createSocket(topicId) {
-  var channel = socket.channel("comments:${topicId}", {});
+  var channel = socket.channel("comments:" + topicId, {});
   channel.join().receive("ok", function (resp) {
     console.log("Joined successfully", resp);
   }).receive("error", function (resp) {
@@ -1517,7 +1517,7 @@ socket.connect();
 var createSocket = function createSocket(topicId) {
   var channel = socket.channel("comments:" + topicId, {});
   channel.join().receive("ok", function (resp) {
-    console.log("Joined successfully", resp);
+    renderComments(resp.comments);
   }).receive("error", function (resp) {
     console.log("Unable to join", resp);
   });
@@ -1528,6 +1528,14 @@ var createSocket = function createSocket(topicId) {
     channel.push('comment:add', { content: content });
   });
 };
+
+function renderComments(comments) {
+  var renderedComments = comments.map(function (comment) {
+    return "\n      <li class=\"collection-item\">\n        " + comment.content + "\n      </li>\n    ";
+  });
+
+  document.querySelector('.collection').innerHTML = renderedComments.join('');
+}
 
 window.createSocket = createSocket;
 });
