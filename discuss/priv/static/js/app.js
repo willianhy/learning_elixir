@@ -1487,6 +1487,8 @@ var createSocket = function createSocket(topicId) {
     console.log("Unable to join", resp);
   });
 
+  channel.on("comments\xC7" + topicId + ":new", renderComment);
+
   document.querySelector('button').addEventListener('click', function () {
     var content = document.querySelector('textarea').value;
 
@@ -1496,10 +1498,19 @@ var createSocket = function createSocket(topicId) {
 
 function renderComments(comments) {
   var renderedComments = comments.map(function (comment) {
-    return "\n      <li class=\"collection-item\">\n        " + comment.content + "\n      </li>\n    ";
+    return commentTemplate(comment);
   });
 
   document.querySelector('.collection').innerHTML = renderedComments.join('');
+}
+
+function renderComment(comment) {
+  var renderedComment = commentTemplate(comment);
+  document.querySelector('.collection').innerHTML += renderedComment;
+}
+
+function commentTemplate(comment) {
+  return "\n    <li class=\"collection-item\">\n      " + comment.content + "\n    </li>\n  ";
 }
 
 window.createSocket = createSocket;
@@ -1547,8 +1558,8 @@ function renderComments(comments) {
   document.querySelector('.collection').innerHTML = renderedComments.join('');
 }
 
-function renderComment(comment) {
-  var renderedComment = commentTemplate(comment);
+function renderComment(event) {
+  var renderedComment = commentTemplate(event.comment);
   document.querySelector('.collection').innerHTML += renderedComment;
 }
 
