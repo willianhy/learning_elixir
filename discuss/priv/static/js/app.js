@@ -1471,77 +1471,23 @@ window.addEventListener('click', function (event) {
   })();
 });
 require.register("Git/learning_elixir/discuss/web/static/js/socket.js", function(exports, require, module) {
-"use strict";
+'use strict';
 
-var _phoenix = require("phoenix");
+var _phoenix = require('phoenix');
 
-var socket = new _phoenix.Socket("/socket", { params: { token: window.userToken } });
-
-socket.connect();
-
-var createSocket = function createSocket(topicId) {
-  var channel = socket.channel("comments:" + topicId, {});
-  channel.join().receive("ok", function (resp) {
-    renderComments(resp.comments);
-  }).receive("error", function (resp) {
-    console.log("Unable to join", resp);
-  });
-
-  channel.on("comments\xC7" + topicId + ":new", renderComment);
-
-  document.querySelector('button').addEventListener('click', function () {
-    var content = document.querySelector('textarea').value;
-
-    channel.push('comment:add', { content: content });
-  });
-};
-
-function renderComments(comments) {
-  var renderedComments = comments.map(function (comment) {
-    return commentTemplate(comment);
-  });
-
-  document.querySelector('.collection').innerHTML = renderedComments.join('');
-}
-
-function renderComment(comment) {
-  var renderedComment = commentTemplate(comment);
-  document.querySelector('.collection').innerHTML += renderedComment;
-}
-
-function commentTemplate(comment) {
-  return "\n    <li class=\"collection-item\">\n      " + comment.content + "\n    </li>\n  ";
-}
-
-window.createSocket = createSocket;
-});
-
-require.register("web/static/js/app.js", function(exports, require, module) {
-"use strict";
-
-require("phoenix_html");
-
-require("./socket");
-});
-
-;require.register("web/static/js/socket.js", function(exports, require, module) {
-"use strict";
-
-var _phoenix = require("phoenix");
-
-var socket = new _phoenix.Socket("/socket", { params: { token: window.userToken } });
+var socket = new _phoenix.Socket('/socket', { params: { token: window.userToken } });
 
 socket.connect();
 
 var createSocket = function createSocket(topicId) {
-  var channel = socket.channel("comments:" + topicId, {});
-  channel.join().receive("ok", function (resp) {
+  var channel = socket.channel('comments:' + topicId, {});
+  channel.join().receive('ok', function (resp) {
     renderComments(resp.comments);
-  }).receive("error", function (resp) {
-    console.log("Unable to join", resp);
+  }).receive('error', function (resp) {
+    console.log('Unable to join', resp);
   });
 
-  channel.on("comments\xC7" + topicId + ":new", renderComment);
+  channel.on('comments:' + topicId + ':new', renderComment);
 
   document.querySelector('button').addEventListener('click', function () {
     var content = document.querySelector('textarea').value;
@@ -1564,7 +1510,61 @@ function renderComment(event) {
 }
 
 function commentTemplate(comment) {
-  return "\n    <li class=\"collection-item\">\n      " + comment.content + "\n    </li>\n  ";
+  return '\n    <li class="collection-item">\n      ' + comment.content + '\n    </li>\n  ';
+}
+
+window.createSocket = createSocket;
+});
+
+require.register("web/static/js/app.js", function(exports, require, module) {
+"use strict";
+
+require("phoenix_html");
+
+require("./socket");
+});
+
+;require.register("web/static/js/socket.js", function(exports, require, module) {
+'use strict';
+
+var _phoenix = require('phoenix');
+
+var socket = new _phoenix.Socket('/socket', { params: { token: window.userToken } });
+
+socket.connect();
+
+var createSocket = function createSocket(topicId) {
+  var channel = socket.channel('comments:' + topicId, {});
+  channel.join().receive('ok', function (resp) {
+    renderComments(resp.comments);
+  }).receive('error', function (resp) {
+    console.log('Unable to join', resp);
+  });
+
+  channel.on('comments:' + topicId + ':new', renderComment);
+
+  document.querySelector('button').addEventListener('click', function () {
+    var content = document.querySelector('textarea').value;
+
+    channel.push('comment:add', { content: content });
+  });
+};
+
+function renderComments(comments) {
+  var renderedComments = comments.map(function (comment) {
+    return commentTemplate(comment);
+  });
+
+  document.querySelector('.collection').innerHTML = renderedComments.join('');
+}
+
+function renderComment(event) {
+  var renderedComment = commentTemplate(event.comment);
+  document.querySelector('.collection').innerHTML += renderedComment;
+}
+
+function commentTemplate(comment) {
+  return '\n    <li class="collection-item">\n      ' + comment.content + '\n    </li>\n  ';
 }
 
 window.createSocket = createSocket;
